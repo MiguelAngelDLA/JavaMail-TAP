@@ -30,6 +30,23 @@ public class MessageSender {
         this.verification = verification;
         this.mime = new MimeMessage(verification.getSession());
     }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public String getMensajePrincipal() {
+        return mensajePrincipal;
+    }
+
+    public void setMensajePrincipal(String mensajePrincipal) {
+        this.mensajePrincipal = mensajePrincipal;
+    }
+    
     
     public void addPara(String para){
         correosPara.add(para);
@@ -43,8 +60,8 @@ public class MessageSender {
         correosCCO.add(cco);
     }
     
-    public void pathFiles(String cco){
-        pathFiles.add(cco);
+    public void addPathFiles(String path){
+        pathFiles.add(path);
     }
     
     public void enviarMensaje(){

@@ -94,7 +94,7 @@ public final class Verification {
      * @param email el email para checar su validez
      * @return si el email es valido o no
      */
-    public static boolean isEmailValid(String email)
+    public boolean isEmailValid(String email)
     {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                             "[a-zA-Z0-9_+&*-]+)*@" +
