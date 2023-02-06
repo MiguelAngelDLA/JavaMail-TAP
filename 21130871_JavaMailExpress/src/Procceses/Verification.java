@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import javax.mail.Message;
+import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -22,13 +23,15 @@ import javax.swing.JOptionPane;
  *
  * @author migue
  */
-public final class Verification {
+public class Verification {
     
-    String username;
-    String password;
-    Properties properties; 
-    Session session;
-    MimeMessage msg;
+    static String username;
+    static String password;
+    static Properties properties; 
+    static Session session;
+    static MimeMessage msg;
+    static Transport mTransport;
+    
     public Verification(){
         properties = new Properties();
         
@@ -41,7 +44,6 @@ public final class Verification {
         
     }
     
-    /** getters y setters*/
     public String getUsername() {
         return username;
     }
@@ -81,6 +83,10 @@ public final class Verification {
     public void setMsg(MimeMessage msg) {
         this.msg = msg;
     }
+
+    public Transport getmTransport() {
+        return mTransport;
+    }
     
     /**
      * Checa si el correo proveido es valido o no,
@@ -94,7 +100,7 @@ public final class Verification {
      * @param email el email para checar su validez
      * @return si el email es valido o no
      */
-    public boolean isEmailValid(String email)
+    public static boolean isEmailValid(String email)
     {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                             "[a-zA-Z0-9_+&*-]+)*@" +
@@ -113,11 +119,12 @@ public final class Verification {
      * la cuenta, si la cuenta y contraseña no coinciden lanza una excepción.
      */
     public void startSession(){
-        properties.setProperty("mail.smtp.user",this.username);
+        properties.setProperty("mail.smtp.user",username);
         this.session = Session.getInstance(properties, null);
         try{
-            Transport mTransport = session.getTransport("smtp");
-            mTransport.connect(this.username, this.password);
+            mTransport = session.getTransport("smtp");
+            mTransport.connect(username, password);
+            mTransport.close();
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true);
             
