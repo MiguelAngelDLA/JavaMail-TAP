@@ -9,6 +9,7 @@ import GUI.ErrorPane;
 import GUI.MainFrame;
 import java.util.Date;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -39,7 +40,8 @@ public final class Verification {
         properties.setProperty("mail.smtp.auth", "true");
         
     }
-
+    
+    /** getters y setters*/
     public String getUsername() {
         return username;
     }
@@ -80,7 +82,36 @@ public final class Verification {
         this.msg = msg;
     }
     
+    /**
+     * Checa si el correo proveido es valido o no,
+     * a través de la expresión dada por el 
+     * OWASP Validation Regex repository, regex es una 
+     * secuencia de caracteres que conforman un patrón.
+     * Para más información sobre regex checar:
+     * https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+     * 
+     * TODO: Agregar EmailChecker para más seguridad
+     * @param email el email para checar su validez
+     * @return si el email es valido o no
+     */
+    public static boolean isEmailValid(String email)
+    {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                            "[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                            "A-Z]{2,7}$";
+                              
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
+    }
     
+    /**
+     * Método para iniciar la sesión dentro del login, utiliza el
+     * correo y contraseña proveidos por el usuario para conectarse con
+     * la cuenta, si la cuenta y contraseña no coinciden lanza una excepción.
+     */
     public void startSession(){
         properties.setProperty("mail.smtp.user",this.username);
         this.session = Session.getInstance(properties, null);
