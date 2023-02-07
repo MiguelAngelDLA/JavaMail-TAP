@@ -7,16 +7,11 @@ package Procceses;
 
 import GUI.ErrorPane;
 import GUI.MainFrame;
-import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import javax.mail.Message;
-import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.swing.JOptionPane;
 
 
 /**
@@ -29,18 +24,11 @@ public class Verification {
     static String password;
     static Properties properties; 
     static Session session;
-    static MimeMessage msg;
     static Transport mTransport;
     
     public Verification(){
+                
         properties = new Properties();
-        
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        properties.setProperty("mail.smtp.port", "587");
-        properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-        properties.setProperty("mail.smtp.auth", "true");
         
     }
     
@@ -76,13 +64,6 @@ public class Verification {
         this.session = session;
     }
 
-    public MimeMessage getMsg() {
-        return msg;
-    }
-
-    public void setMsg(MimeMessage msg) {
-        this.msg = msg;
-    }
 
     public Transport getmTransport() {
         return mTransport;
@@ -119,8 +100,15 @@ public class Verification {
      * la cuenta, si la cuenta y contraseña no coinciden lanza una excepción.
      */
     public void startSession(){
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.port", "587");
         properties.setProperty("mail.smtp.user",username);
-        this.session = Session.getInstance(properties, null);
+        properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+        properties.setProperty("mail.smtp.auth", "true");
+        
+        session = Session.getInstance(properties, null);
         try{
             mTransport = session.getTransport("smtp");
             mTransport.connect(username, password);
@@ -129,7 +117,6 @@ public class Verification {
             mainFrame.setVisible(true);
             
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
             ErrorPane error = new ErrorPane();
             error.setVisible(true);
         }
