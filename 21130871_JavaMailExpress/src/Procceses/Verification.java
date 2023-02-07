@@ -98,6 +98,7 @@ public class Verification {
      * Método para iniciar la sesión dentro del login, utiliza el
      * correo y contraseña proveidos por el usuario para conectarse con
      * la cuenta, si la cuenta y contraseña no coinciden lanza una excepción.
+     * 
      */
     public void startSession(){
         properties.put("mail.smtp.host", "smtp.gmail.com");
