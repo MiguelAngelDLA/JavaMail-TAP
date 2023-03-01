@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -69,6 +70,10 @@ public class Verification {
         return mTransport;
     }
     
+    public String getDomain(String email){
+        return email.substring(email.indexOf('@') + 1);
+    }
+    
     /**
      * Checa si el correo proveido es valido o no,
      * a través de la expresión dada por el 
@@ -101,8 +106,31 @@ public class Verification {
      * 
      */
     public void startSession(){
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        switch(getDomain(username)){
+            case "gmail.com":
+                properties.put("mail.smtp.host", "smtp.gmail.com");
+                properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+                break;
+            case "outlook.com":
+                properties.put("mail.smtp.host", "smtp.office365.com");
+                properties.put("mail.smtp.ssl.trust", "smtp.office365.com");
+                break;
+            case "hotmail.com":
+                properties.put("mail.smtp.host", "smtp.office365.com");
+                properties.put("mail.smtp.ssl.trust", "smtp.office365.com");
+                break;
+            case "aol.com":
+                properties.put("mail.smtp.host", "smtp.aol.com");
+                properties.put("mail.smtp.ssl.trust", "smtp.aol.com");
+            default:
+                try{
+                    properties.put("mail.smtp.host", "smtp." + getDomain(username));
+                    properties.put("mail.smtp.ssl.trust", "smtp." + getDomain(username));
+                }
+                catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Correo todavía no soportado, contactese con servicios");
+                }
+        }
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.smtp.port", "587");
         properties.setProperty("mail.smtp.user",username);

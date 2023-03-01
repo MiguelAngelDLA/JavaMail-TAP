@@ -5,6 +5,8 @@
  */
 package Procceses;
 
+import GUI.MainFrame;
+import GUI.SuccessFrame;
 import static Procceses.Verification.mTransport;
 import java.io.File;
 import java.io.IOException;
@@ -87,9 +89,7 @@ public class MessageSender {
             mime.setSubject(asunto);
             Multipart multipart = new MimeMultipart();
 
-            // Set text message part
-
-            BodyPart messageBodyPart = new MimeBodyPart();
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(this.getMensajePrincipal());
             multipart.addBodyPart(messageBodyPart);
             
@@ -109,7 +109,8 @@ public class MessageSender {
             
             mTransport.close();
             
-            JOptionPane.showMessageDialog(null, "Mensaje enviado con exito!");
+            SuccessFrame success = new SuccessFrame();
+            success.setVisible(true);
         }catch(AddressException e){
             JOptionPane.showMessageDialog(null, e);
         }catch(MessagingException e){
